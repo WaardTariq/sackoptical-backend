@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,8 +24,19 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('/reset-password',  'resetPassword');
 });
 
-// Protected Auth Routes (require authentication)
+
+// Public Category Routes
+Route::controller(CategoryController::class)->group(function () {
+    Route::get('/categories', 'index');
+    Route::get('/categories/featured', 'featured');
+    Route::get('/categories/{identifier}', 'show');
+    Route::get('/subcategories', 'subcategories');
+    Route::get('/subcategories/{identifier}', 'showSubcategory');
+    Route::get('/categories/{categoryIdentifier}/subcategories', 'subcategoriesByCategory');
+});
+
 Route::middleware('auth:sanctum')->group(function () {
+
     Route::controller(AuthController::class)->group(function () {
         Route::post('/logout',  'logout');
         Route::get('/profile',  'profile');
